@@ -8,7 +8,7 @@ class Classifier:
         self.y = self.y.astype(int)  # convert string to int
         self.X = self.X / 255.  # normalize data
         self.model = ATOMClassifier(self.X, self.y, test_size=10000, n_jobs=-1,
-                                    device="gpu", engine="cuml", verbose=2, random_state=1)
+                                    device="cpu", engine="sklearn", verbose=2, random_state=1)
         self.results = None
 
     def train(self):
