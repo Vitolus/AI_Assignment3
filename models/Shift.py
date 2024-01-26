@@ -6,7 +6,7 @@ from cupyx.scipy.spatial.distance import pdist
 import time
 
 
-class Mixture(Classifier):
+class Shift(Classifier):
     def __init__(self):
         super().__init__()
 

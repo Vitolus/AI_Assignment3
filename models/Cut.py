@@ -13,7 +13,7 @@ def _predict(labels, X_train, X_test, k=10):
     return cp.asarray([cp.argmax(cp.bincount(label)) for label in k_labels])
 
 
-class Mixture(Classifier):
+class Cut(Classifier):
     def __init__(self):
         super().__init__()
 
