@@ -3,6 +3,7 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import MeanShift
 import cupy as cp
 from cupyx.scipy.spatial.distance import pdist
+import time
 
 
 class Mixture(Classifier):
