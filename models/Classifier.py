@@ -1,5 +1,7 @@
 from sklearn.datasets import fetch_openml
 from atom import ATOMClassifier
+import cupy as cp
+from cupyx.scipy.spatial.distance import pdist
 
 
 class Classifier:
@@ -13,3 +15,21 @@ class Classifier:
         self.X_test = self.model.X_test.to_numpy()
         self.y_train = self.model.y_train.to_numpy()
         self.y_test = self.model.y_test.to_numpy()
+
+    def _fit_predict(self, model, pca, k, best_params):
+        model.fit(pca.fit_transform(self.X_train))
+        y_pred = cp.asarray(model.predict(pca.transform(self.X_test)))
+        self._compute_rand_index(y_pred, k, best_params)
+
+    def _compute_rand_index(self, y_pred, k, best_params):
+        y_test = cp.asarray(self.y_test)
+        n = len(y_test)
+        # Calculate pairwise equality for y_test and y_pred
+        eq_test = pdist(y_test[:, None], metric='euclidean') == 0
+        eq_pred = pdist(y_pred[:, None], metric='euclidean') == 0
+        r = 2 * (cp.sum(eq_test & eq_pred) + cp.sum(~eq_test & ~eq_pred)) / (n * (n - 1))
+        # Save the best parameters
+        if r > best_params[-1]['rand_index']:
+            best_params[-1]['clusters'] = k
+            best_params[-1]['rand_index'] = r
+
