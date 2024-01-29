@@ -5,7 +5,7 @@ from sklearn.cluster import MeanShift
 
 class Shift(Classifier):
     def __init__(self):
-        super().__init__(n_rows=70000, test_size=10000)
+        super().__init__(n_rows=30000, test_size=7200)
 
     def train(self):
         best_params = []

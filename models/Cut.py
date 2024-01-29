@@ -10,12 +10,12 @@ def _predict(labels, X_train, X_test, k=10):
     similarity = rbf_kernel(X_test, X_train)
     k_idx = cp.argsort(similarity, axis=1)[:, -k:]
     k_labels = labels[k_idx]
-    return cp.asarray([cp.argmax(cp.bincount(label)) for label in k_labels])
+    return cp.asarray([cp.argmax(cp.bincount(cp.asarray(label))) for label in k_labels])
 
 
 class Cut(Classifier):
     def __init__(self):
-        super().__init__(n_rows=50000, test_size=10000)
+        super().__init__(n_rows=10000, test_size=5800)
 
     def train(self):
         best_params = []
@@ -28,7 +28,7 @@ class Cut(Classifier):
             # Iterate over different number of clusters
             for n_clusters in range(5, 16):
                 sc = SpectralClustering(n_clusters=n_clusters, assign_labels='cluster_qr',
-                                        n_jobs=-1, random_state=1, verbose=2)
+                                        n_jobs=-1, random_state=1)
                 print(f'Training PCA with {n_components} components and {n_clusters} clusters')
                 start = time.perf_counter()
                 sc.fit(X_train_pca)

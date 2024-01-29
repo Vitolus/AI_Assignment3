@@ -17,7 +17,7 @@ class Mixture(Classifier):
             # Iterate over different number of clusters
             for n_clusters in range(5, 16):
                 gm = GaussianMixture(n_components=n_clusters, covariance_type='diag',
-                                     random_state=1, verbose=1)
+                                     random_state=1)
                 print(f'Training PCA with {n_components} components and {n_clusters} clusters')
                 self._fit_predict(gm, pca, n_clusters, best_params)
             # Print the best parameters
