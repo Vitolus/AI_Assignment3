@@ -5,7 +5,7 @@ from sklearn.cluster import MeanShift
 
 class Shift(Classifier):
     def __init__(self):
-        super().__init__(n_rows=30000, test_size=7200)
+        super().__init__()
 
     def train(self):
         best_params = []
@@ -16,7 +16,7 @@ class Shift(Classifier):
                                 'time': {'fit': 0.0, 'predict': 0.0}, 'rand_index': 0.0})
             # Iterate over different kernel widths
             for bandwidth in range(5, 16):
-                ms = MeanShift(bandwidth=bandwidth,
+                ms = MeanShift(bandwidth=bandwidth, bin_seeding=True, cluster_all=False,
                                n_jobs=-1)
                 print(f'Training PCA with {n_components} components and {bandwidth} bandwidth')
                 self._fit_predict(ms, pca, bandwidth, best_params)
