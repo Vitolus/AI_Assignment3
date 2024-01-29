@@ -15,7 +15,7 @@ def _predict(labels, X_train, X_test, k=10):
 
 class Cut(Classifier):
     def __init__(self):
-        super().__init__()
+        super().__init__(n_rows=50000, test_size=10000)
 
     def train(self):
         best_params = []
@@ -29,6 +29,7 @@ class Cut(Classifier):
             for n_clusters in range(5, 16):
                 sc = SpectralClustering(n_clusters=n_clusters, assign_labels='cluster_qr',
                                         n_jobs=-1, random_state=1, verbose=2)
+                print(f'Training PCA with {n_components} components and {n_clusters} clusters')
                 start = time.perf_counter()
                 sc.fit(X_train_pca)
                 end_fit = time.perf_counter() - start

@@ -5,7 +5,7 @@ from sklearn.cluster import MeanShift
 
 class Shift(Classifier):
     def __init__(self):
-        super().__init__()
+        super().__init__(n_rows=70000, test_size=10000)
 
     def train(self):
         best_params = []
@@ -18,6 +18,7 @@ class Shift(Classifier):
             for bandwidth in range(5, 16):
                 ms = MeanShift(bandwidth=bandwidth,
                                n_jobs=-1)
+                print(f'Training PCA with {n_components} components and {bandwidth} bandwidth')
                 self._fit_predict(ms, pca, bandwidth, best_params)
             # Print the best parameters
             print(f'Best parameters for {n_components} components: {best_params[-1]}')
