@@ -1,3 +1,5 @@
+import time
+
 from sklearn.datasets import fetch_openml
 from atom import ATOMClassifier
 import cupy as cp
@@ -17,11 +19,15 @@ class Classifier:
         self.y_test = self.model.y_test.to_numpy()
 
     def _fit_predict(self, model, pca, k, best_params):
+        start = time.perf_counter()
         model.fit(pca.fit_transform(self.X_train))
+        end_fit = time.perf_counter() - start
+        start = time.perf_counter()
         y_pred = cp.asarray(model.predict(pca.transform(self.X_test)))
-        self._compute_rand_index(y_pred, k, best_params)
+        end_pre = time.perf_counter() - start
+        self._compute_rand_index(y_pred, k, best_params, end_fit, end_pre)
 
-    def _compute_rand_index(self, y_pred, k, best_params):
+    def _compute_rand_index(self, y_pred, k, best_params, end_fit, end_pre):
         y_test = cp.asarray(self.y_test)
         n = len(y_test)
         # Calculate pairwise equality for y_test and y_pred
@@ -32,4 +38,6 @@ class Classifier:
         if r > best_params[-1]['rand_index']:
             best_params[-1]['clusters'] = k
             best_params[-1]['rand_index'] = r
+            best_params[-1]['time']['fit'] = end_fit
+            best_params[-1]['time']['predict'] = end_pre
 

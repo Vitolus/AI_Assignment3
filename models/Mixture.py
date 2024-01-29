@@ -1,8 +1,6 @@
 from models.Classifier import Classifier
 from sklearn.decomposition import PCA
 from sklearn.mixture import GaussianMixture
-import cupy as cp
-from cupyx.scipy.spatial.distance import pdist
 
 
 class Mixture(Classifier):
@@ -14,7 +12,8 @@ class Mixture(Classifier):
         # Iterate over different PCA dimensions
         for n_components in range(2, 203, 10):
             pca = PCA(n_components=n_components)
-            best_params.append({'components': n_components, 'clusters': 0, 'rand_index': 0.0})
+            best_params.append({'components': n_components, 'clusters': 0,
+                                'time': {'fit': 0.0, 'predict': 0.0}, 'rand_index': 0.0})
             # Iterate over different number of clusters
             for n_clusters in range(5, 16):
                 gm = GaussianMixture(n_components=n_clusters, covariance_type='diag',
