@@ -15,7 +15,7 @@ def _predict(labels, X_train, X_test, k=10):
 
 class Cut(Classifier):
     def __init__(self):
-        super().__init__(n_rows=10000, test_size=2000)
+        super().__init__(n_rows=20000, test_size=5000)
 
     def train(self):
         best_params = []
